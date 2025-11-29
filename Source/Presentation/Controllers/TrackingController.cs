@@ -11,15 +11,12 @@ namespace Tracking.Api.Presentation.Controllers;
 [Route("[controller]")]
 [EnableRateLimiting(AppConstants.RateLimitPolicy)]
 public class TrackingController([FromKeyedServices(AppConstants.UpsClientName)] ITracker upsTracker) : ControllerBase
-{        
+{
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Get([FromQuery] TrackingRequest request)
-    {              
-        var test = await upsTracker.TrackAsync(request.TrackingNumber);
-
-
-
-       return Ok();
-    }    
+    {
+        var info = await upsTracker.TrackAsync(request.TrackingNumber);
+        return Ok(info);
+    }
 }

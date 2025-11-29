@@ -1,9 +1,11 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Extensions;
 using Tracking.Api.Core.Configuration;
 using Tracking.Api.Core.Constants;
 using Tracking.Api.Core.Interfaces;
+using Tracking.Api.Core.Mappers;
 using Tracking.Api.Core.Models;
 using Tracking.Api.Core.Utils;
 namespace Tracking.Api.Core.Services;
@@ -50,10 +52,9 @@ public class UpsTracker(IHttpClientFactory httpClientFactory, IOptions<Environme
         var trackResponse = await client.PostAsync(options.Value.Urls.UpsTrack, content, cancellationToken);
         
         var trackResponseContent = await trackResponse.Content.ReadAsStringAsync(cancellationToken);
+        var upsTrackResponse = JsonSerializer.Deserialize<UpsTrackResponse>(trackResponseContent);
 
-
-
-        return default!;
+        return upsTrackResponse!.UpsToTrack();
     }
 
     
