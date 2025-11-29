@@ -12,9 +12,19 @@ public sealed class EnvironmentSettings
 
     public AppUrls Urls { get; set; } = new AppUrls();
 
+    public TrackingSettings Tracking { get; set; } = new TrackingSettings();
+
     public sealed class AppUrls
     {
         public string UpsMain { get; set; } = string.Empty;
         public string UpsTrack { get; set; } = string.Empty;
+    }
+
+    public sealed class TrackingSettings
+    {
+        public int ChannelCapacity { get; set; } = 1000;
+        public int CacheExpirationMinutes { get; set; } = 5;
+        public int MaxConcurrentProcessing { get; set; } = 10;
+        public int ProcessingDelayMs { get; set; } = 100;
     }
 }
