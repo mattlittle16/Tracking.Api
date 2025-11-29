@@ -1,0 +1,8 @@
+**/appsettings.json  filter=git-crypt diff=git-crypt
+**/appsettings.Development.json  filter=git-crypt diff=git-crypt
+**/appsettings.Docker.json	 filter=git-crypt diff=git-crypt
+**/terraform/terraform.tfvars  filter=git-crypt diff=git-crypt
+**/terraform/terraform.tfstate  filter=git-crypt diff=git-crypt
+**/terraform/terraform.tfstate.backup  filter=git-crypt diff=git-crypt
+**/dockerdeploy.sh  filter=git-crypt diff=git-crypt
+**/copilot-instructions.md  filter=git-crypt diff=git-crypt
