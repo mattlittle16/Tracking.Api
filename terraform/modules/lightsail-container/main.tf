@@ -31,6 +31,7 @@ resource "aws_lightsail_container_service" "tracking_api" {
 resource "aws_lightsail_container_service_deployment_version" "tracking_api" {
   service_name = aws_lightsail_container_service.tracking_api.name
 
+  # Main API container
   container {
     container_name = "tracking-api"
     image         = var.container_image
@@ -38,6 +39,7 @@ resource "aws_lightsail_container_service_deployment_version" "tracking_api" {
     environment = {
       ASPNETCORE_ENVIRONMENT                   = var.environment_name
       ASPNETCORE_URLS                         = "http://+:80"
+      AppSettings__ProxyUrl                   = "http://localhost:8080"
       AppSettings__XApiKey                    = var.api_key
       AppSettings__Urls__UpsMain              = var.ups_main_url
       AppSettings__Urls__UpsTrack             = var.ups_track_url
@@ -49,6 +51,17 @@ resource "aws_lightsail_container_service_deployment_version" "tracking_api" {
 
     ports = {
       "80" = "HTTP"
+    }
+  }
+
+  # mitmproxy sidecar container for TLS fingerprint handling
+  container {
+    container_name = "mitmproxy"
+    image         = "mitmproxy/mitmproxy:latest"
+    command       = ["mitmdump", "--listen-host", "0.0.0.0", "--listen-port", "8080", "--set", "block_global=false"]
+
+    ports = {
+      "8080" = "HTTP"
     }
   }
 

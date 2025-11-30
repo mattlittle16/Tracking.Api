@@ -10,6 +10,8 @@ public sealed class EnvironmentSettings
 
     public int DailyLimit { get; set; } = 990;
 
+    public string ProxyUrl { get; set; } = string.Empty;
+
     public AppUrls Urls { get; set; } = new AppUrls();
 
     public TrackingSettings Tracking { get; set; } = new TrackingSettings();

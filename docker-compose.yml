@@ -25,6 +25,7 @@ services:
       # list of environment variables within the container
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80;
+      - AppSettings__ProxyUrl=http://mitm-proxy:8080
       #- DBHOST=database
       # - ASPNETCORE_URLS=http://+:8080;https://+:8081
       # - ASPNETCORE_Kestrel__Certificates__Default__Password=Password
