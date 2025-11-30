@@ -10,14 +10,17 @@ public static class Clients
     {
         services.AddHttpClient(AppConstants.UpsClientName, client =>
         {
-            client.Timeout = TimeSpan.FromSeconds(10);
+            client.Timeout = TimeSpan.FromSeconds(30);
+            client.DefaultRequestVersion = HttpVersion.Version11;
+            client.DefaultVersionPolicy = HttpVersionPolicy.RequestVersionExact;
         }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
             UseCookies = true,
             AllowAutoRedirect = true,
-            //Proxy = new WebProxy(new Uri("http://127.0.0.1:8866")), // Fiddler's default port
-            //UseProxy = true
+            Proxy = new WebProxy(new Uri("http://mitm-proxy:8080")),
+            UseProxy = true,
+            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
         });
 
         return services;
