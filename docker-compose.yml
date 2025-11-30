@@ -1,0 +1,40 @@
+# version: "3.8"
+# https://docs.docker.com/compose/
+volumes:
+  datafiles:
+
+services:
+  # service images to be be created
+  api: 
+    build: Source/
+    ports:
+      # list of port mappings
+      - 80:80
+      #- 8081:8081
+    environment:
+      # list of environment variables within the container
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80;
+      #- DBHOST=database
+      # - ASPNETCORE_URLS=http://+:8080;https://+:8081
+      # - ASPNETCORE_Kestrel__Certificates__Default__Password=Password
+      # - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    #volumes:
+      # a volume is a directory that is shared between the host and the container
+      # dir location of cert on host. (ro stands for read only permissions to volume directory)
+      #- ~/.aspnet/https:/https:ro
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 120s
+    networks:
+      - my-network
+
+networks:
+  my-network:
+     driver: bridge
+
+#dev-certs https --clean  
+#dotnet dev-certs https --trust -ep ~/.aspnet/https/aspnetapp.pfx -p Password;    

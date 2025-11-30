@@ -6,3 +6,5 @@
 **/terraform/terraform.tfstate.backup  filter=git-crypt diff=git-crypt
 **/dockerdeploy.sh  filter=git-crypt diff=git-crypt
 **/copilot-instructions.md  filter=git-crypt diff=git-crypt
+**/setup-ecr.sh  filter=git-crypt diff=git-crypt
+**/variables.tf  filter=git-crypt diff=git-crypt

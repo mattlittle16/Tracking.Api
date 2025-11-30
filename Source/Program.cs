@@ -32,6 +32,15 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Tracking API",
+        Version = "v1",
+        Description = "Asynchronous package tracking API with support for multiple carriers. " +
+                      "Submit tracking requests and poll for results using the returned job ID. " +
+                      "Results are cached for 5 minutes."
+    });
+
     options.AddSecurityDefinition("ApiKey", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
