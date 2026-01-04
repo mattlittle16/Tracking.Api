@@ -6,6 +6,10 @@ resource "aws_lightsail_certificate" "tracking_api" {
   tags = merge(var.tags, {
     Name = var.certificate_name
   })
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 # DNS validation records must be created manually or in a separate step

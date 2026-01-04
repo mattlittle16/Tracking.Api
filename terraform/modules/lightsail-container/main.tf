@@ -25,6 +25,10 @@ resource "aws_lightsail_container_service" "tracking_api" {
     Name        = var.service_name
     Environment = var.environment_name
   })
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 # Container deployment version
