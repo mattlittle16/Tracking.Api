@@ -1,0 +1,51 @@
+name: Deploy to Homelab
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Unlock git-crypt
+      run: |
+        echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > /tmp/git-crypt-key
+        git-crypt unlock /tmp/git-crypt-key
+        rm /tmp/git-crypt-key
+
+    - name: Stop existing container (if running)
+      run: |
+        docker stop trackingapi || true
+        docker rm trackingapi || true
+      continue-on-error: true
+
+    - name: Build Docker image
+      run: |
+        docker build -t trackingapi:latest ./Source
+
+    - name: Run new container
+      run: |
+        docker run -d \
+          --name trackingapi \
+          --restart always \
+          --network app-network \
+          -e ASPNETCORE_ENVIRONMENT=Production \
+          -e ASPNETCORE_URLS=http://+:80 \
+          -e AppSettings__XApiKey=${{ secrets.XAPI_KEY }} \
+          trackingapi:latest
+
+    - name: Verify deployment
+      run: |
+        sleep 10
+        docker ps | grep trackingapi || exit 1
+        docker exec trackingapi curl -f http://localhost/healthcheck || exit 1
+
+    - name: Clean up old images
+      run: |
+        docker image prune -f
